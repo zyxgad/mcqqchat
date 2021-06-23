@@ -1,0 +1,16 @@
+name: QQChatMc
+version: 1.0.0
+api-version: 1.16
+author: zyxgad
+main: com.github.zyxgad.qqchat.QQChat
+
+commands:
+  bindqq:
+    description: This command will bind your qqid
+    usage: 'Player: /<command> [QQID]'
+    permission: qqchat.default
+    permission-message: You don't have <permission>
+
+permissions:
+  qqchat.default:
+    default: true
