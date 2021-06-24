@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.zyxgad.qqchat.QQChat;
 import com.github.zyxgad.qqchat.config.UserConfig;
@@ -51,8 +52,7 @@ public final class Event{
 		this.writeTo(new DataOutputStream(outstream));
 	}
 
-	static Event recvMessage(DataInputStream instream) throws IOException{
-		Event recv = null;
+	static void recvMessage(DataInputStream instream, TcpSocket.TcpHelper helper) throws IOException{
 		final int id = instream.readInt();
 		final byte type = instream.readByte();
 		final long qqid = instream.readLong();
@@ -61,23 +61,34 @@ public final class Event{
 		instream.read(data);
 		switch(type){
 			case SEND_MSG_ID:{
-				String msg = Util.bytesToString(data);
+				final String msg = Util.bytesToString(data);
 				OfflinePlayer player = UserConfig.getInstance().getQQPlayer(qqid);
 				if(player == null){
-					recv = Event.newRecvMessage(id, "[消息发送失败]此QQ未绑定游戏账号");
+					helper.send(Event.newRecvMessage(id, "[错误]此QQ未绑定游戏账号"));
 					break;
 				}
-				QQChat.INSTANCE.sendMessage(player, msg);
-				recv = Event.newRecvMessage(id, "");
+				QQChat.INSTANCE.sendMessage(player, "QQ_WEB", msg);
+				helper.send(Event.newRecvMessage(id, ""));
 				break;
 			}
 			case SEND_CMD_ID:{
-				String msg = Util.bytesToString(data);
-				recv = Event.newRecvMessage(id, "[指令执行失败]" + msg);
+				final String msg = Util.bytesToString(data);
+				final OfflinePlayer player = UserConfig.getInstance().getQQPlayer(qqid);
+				if(player == null){
+					helper.send(Event.newRecvMessage(id, "[错误]此QQ未绑定游戏账号"));
+					return;
+				}
+				new BukkitRunnable(){
+					@Override
+					public void run(){
+						final String rmsg = new WebCommandSender(player).runCommand(msg);
+						helper.send(Event.newRecvMessage(id, rmsg));
+						return;
+					}
+				}.runTask(QQChat.INSTANCE);
 				break;
 			}
 		}
-		return recv;
 	}
 	static Event recvMessage(InputStream instream) throws IOException{
 		return Event.recvMessage(new DataInputStream(instream));

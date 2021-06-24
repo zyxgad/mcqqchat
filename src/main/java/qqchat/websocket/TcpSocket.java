@@ -74,10 +74,7 @@ public final class TcpSocket{
 				Event event;
 				while(!this.isInterrupted()){
 					try{
-						event = Event.recvMessage(datain);
-						if(event != null){
-							TcpHelper.this.send(event);
-						}
+						Event.recvMessage(datain, TcpHelper.this);
 					}catch(EOFException | SocketException e){
 						break;
 					}catch(IOException e){

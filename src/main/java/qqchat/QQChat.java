@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
 
 import com.github.zyxgad.qqchat.config.UserConfig;
+import com.github.zyxgad.qqchat.command.BindQQCommand;
 import com.github.zyxgad.qqchat.event.ChatListener;
 import com.github.zyxgad.qqchat.websocket.TcpSocket;
 import com.github.zyxgad.qqchat.util.ColorTextBuilder;
@@ -68,12 +69,12 @@ public final class QQChat extends JavaPlugin{
 
 	private void bindCommands(){
 		// this.getCommand("qqchat").setExecutor(new QQChatCommand());
-		// this.getCommand("qqbind").setExecutor(new QQBindCommand());
+		this.getCommand("bindqq").setExecutor(new BindQQCommand());
 	}
 
-	public void sendMessage(OfflinePlayer player, String msg){
+	public void sendMessage(final OfflinePlayer player, final String world, final String msg){
 		final String message = new ColorTextBuilder()
-			.add('[').yellow("WORLD").add('/').green(player.getName()).line("]:")
+			.add('[').yellow(world).add('/').green(player.getName()).line("]:")
 			.add(' ').add(msg)
 			.toString();
 		for(Player p: Bukkit.getOnlinePlayers()){

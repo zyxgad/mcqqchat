@@ -221,4 +221,13 @@ public final class ColorTextBuilder{
 	public String toString(){
 		return this.builder.toString();
 	}
+
+	public String toWhiteString(){
+		StringBuilder colorStr = new StringBuilder(this.builder);
+		int n;
+		while((n = colorStr.indexOf(String.valueOf(ChatColor.COLOR_CHAR))) != -1){
+			colorStr.delete(n, n + 2);
+		}
+		return colorStr.toString();
+	}
 }
