@@ -52,7 +52,7 @@ public final class UserConfig{
 		}
 
 		public void toJson(JsonWriter jwriter) throws IOException{
-			jwriter.name(String.valueOf(qqid));
+			jwriter.name(player.getUniqueId().toString());
 			jwriter.beginObject();
 			jwriter.name("qq");
 			jwriter.value(qqid);
@@ -62,18 +62,24 @@ public final class UserConfig{
 		}
 	}
 
-	private Map<Long, Item> storage;
+	private Map<UUID, Item> storage;
 
 	private UserConfig(){
 		this.storage = new HashMap<>();
 	}
 
 	public void setPlayerQQ(OfflinePlayer player, long qqid){
-		this.storage.put(Long.valueOf(qqid), new Item(player, qqid));
+		this.storage.put(player.getUniqueId(), new Item(player, qqid));
 	}
 
 	public OfflinePlayer getQQPlayer(long qqid){
-		Item item = this.storage.get(Long.valueOf(qqid));
+		Item item = null;
+		for(Item it: this.storage.values()){
+			if(it.qqid == qqid){
+				item = it;
+				break;
+			}
+		}
 		if(item == null){
 			return null;
 		}
@@ -94,7 +100,7 @@ public final class UserConfig{
 			jreader.beginObject();
 			while(jreader.hasNext()){
 				item = new Item(jreader);
-				this.storage.put(Long.valueOf(item.qqid), item);
+				this.storage.put(item.player.getUniqueId(), item);
 			}
 			jreader.endObject();
 		}catch(IOException e){

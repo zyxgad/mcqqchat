@@ -15,6 +15,10 @@ public final class ColorTextBuilder{
 		this.builder = new StringBuilder(len);
 	}
 
+	public ColorTextBuilder(String base){
+		this.builder = new StringBuilder(base);
+	}
+
 	/****************/
 	public ColorTextBuilder add(char c){
 		this.builder.append(c);

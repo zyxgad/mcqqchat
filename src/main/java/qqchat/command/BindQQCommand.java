@@ -22,6 +22,7 @@ public final class BindQQCommand implements CommandExecutor{
 		}
 		long qqid = Long.parseLong(args[0]);
 		UserConfig.getInstance().setPlayerQQ(player, qqid);
+		sender.sendMessage("QQ设置成功");
 		return true;
 	}
 }

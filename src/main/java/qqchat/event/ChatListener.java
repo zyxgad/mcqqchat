@@ -15,13 +15,10 @@ public final class ChatListener implements Listener{
 	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		Player player = event.getPlayer();
-		event.setFormat(new ColorTextBuilder()
-			.add('[').yellow("WORLD").add('/').green(player.getName()).line("]:")
-			.add(" %2$s")
-			.toString());
 
 		if(!event.isCancelled()){
-			TcpSocket.INSTANCE.onPlayerChat(player, event.getMessage());
+			TcpSocket.INSTANCE.onPlayerChat(player, 
+				new ColorTextBuilder(String.format(event.getFormat(), event.getMessage())).toWhiteString());
 		}
 	}
 }

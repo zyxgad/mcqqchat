@@ -62,7 +62,7 @@ public final class Event{
 		switch(type){
 			case SEND_MSG_ID:{
 				final String msg = Util.bytesToString(data);
-				OfflinePlayer player = UserConfig.getInstance().getQQPlayer(qqid);
+				final OfflinePlayer player = UserConfig.getInstance().getQQPlayer(qqid);
 				if(player == null){
 					helper.send(Event.newRecvMessage(id, "[错误]此QQ未绑定游戏账号"));
 					break;
