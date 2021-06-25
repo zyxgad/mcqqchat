@@ -161,8 +161,6 @@ public final class TcpSocket{
 	}
 
 	public void onPlayerChat(Player player, String message){
-		this.send(Event.newPlayerChatMessage(new ColorTextBuilder()
-			.add('[').add(player.getName()).add("]: ").add(message)
-			.toString()));
+		this.send(Event.newPlayerChatMessage(message));
 	}
 }

@@ -18,7 +18,7 @@ public final class ChatListener implements Listener{
 
 		if(!event.isCancelled()){
 			TcpSocket.INSTANCE.onPlayerChat(player, 
-				new ColorTextBuilder(String.format(event.getFormat(), event.getMessage())).toWhiteString());
+				new ColorTextBuilder(String.format(event.getFormat(), player.getName(), event.getMessage())).toWhiteString());
 		}
 	}
 }
